@@ -23,6 +23,8 @@ import type { Tx, UnitOfWork } from '../src/stores.js';
 const ADMIN_URL = process.env.PG_ADMIN_URL;
 const MIGRATIONS = fileURLToPath(new URL('../../../database/migrations', import.meta.url));
 const SECRET = 'pg-test-secret';
+// Test-only password for parmana_app. Servers that require password login (CI, production) need one.
+const APP_TEST_PASSWORD = 'parmana-test-app-password';
 const enc = new TextEncoder();
 
 function signed(event: string, deliveryId: string, payload: unknown): WebhookRequest {
@@ -99,9 +101,10 @@ describe.skipIf(!ADMIN_URL)('PostgreSQL adapter and row-level security (ADR-0003
     await migrate(adminPool, MIGRATIONS);
 
     // Production sets this role's LOGIN and password as an operations step. The test does it here.
-    await adminPool.query('ALTER ROLE parmana_app LOGIN');
+    await adminPool.query(`ALTER ROLE parmana_app LOGIN PASSWORD '${APP_TEST_PASSWORD}'`);
     const appUrl = new URL(adminUrl.toString());
     appUrl.username = 'parmana_app';
+    appUrl.password = APP_TEST_PASSWORD;
     appPool = new Pool({ connectionString: appUrl.toString(), max: 10 });
 
     uow = new PgUnitOfWork(appPool);

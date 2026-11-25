@@ -81,9 +81,9 @@ Mark one option per decision. Then the owner signs below. Each marked decision i
 | D3 Queue (ADR-0004) | [ ] | [ ] | [ ] C |
 | D4 Database access (ADR-0005) | [ ] | [ ] | |
 
-Owner: ______________________  Date: ____________
+Owner: ________Pavan Charak______________  Date: ____25 Nov 2026_______
 
-Core maintainers confirmation for D2: ______________________  Date: ____________
+Core maintainers confirmation for D2: ______________Yes________  Date: _____25 Nov 2026_______
 
 ## What happens after the decisions
 

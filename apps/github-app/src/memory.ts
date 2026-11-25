@@ -1,57 +1,116 @@
 import type {
   AuditEvent,
-  AuditStore,
-  DeliveryStore,
   Installation,
   InstallationStatus,
-  InstallationStore,
-  JobQueue,
+  QueuedJob,
+  RepositoryRecord,
+  RepositorySelection,
+  Tx,
+  UnitOfWork,
 } from './stores.js';
 
-export class MemoryInstallationStore implements InstallationStore {
-  private readonly rows = new Map<number, Installation>();
+/** Full state of the in-memory store. Used only by tests. */
+export interface MemoryState {
+  installations: Map<number, Installation>;
+  repositories: Map<string, { tenantId: string; installationId: number; fullName: string; active: boolean }>;
+  deliveries: Set<string>;
+  audit: AuditEvent[];
+  jobs: QueuedJob[];
+}
 
-  async findByInstallationId(installationId: number): Promise<Installation | undefined> {
-    const row = this.rows.get(installationId);
+function emptyState(): MemoryState {
+  return { installations: new Map(), repositories: new Map(), deliveries: new Set(), audit: [], jobs: [] };
+}
+
+const repoKey = (tenantId: string, githubRepoId: number) => `${tenantId}:${githubRepoId}`;
+
+/**
+ * Transactional in-memory adapter. A transaction works on a copy of the state
+ * and replaces the committed state only when the callback resolves, which
+ * gives the same all-or-nothing behavior as the PostgreSQL adapter.
+ *
+ * Transactions run one at a time. This adapter does not model concurrency.
+ * Concurrency is tested against PostgreSQL.
+ */
+export class MemoryUnitOfWork implements UnitOfWork {
+  private committed: MemoryState = emptyState();
+
+  get state(): Readonly<MemoryState> {
+    return this.committed;
+  }
+
+  async run<T>(fn: (tx: Tx) => Promise<T>): Promise<T> {
+    const draft = structuredClone(this.committed);
+    const result = await fn(new MemoryTx(draft));
+    this.committed = draft;
+    return result;
+  }
+}
+
+class MemoryTx implements Tx {
+  constructor(private readonly s: MemoryState) {}
+
+  async claimDelivery(deliveryId: string): Promise<boolean> {
+    if (this.s.deliveries.has(deliveryId)) return false;
+    this.s.deliveries.add(deliveryId);
+    return true;
+  }
+
+  async lockInstallation(): Promise<void> {
+    // No concurrency in this adapter.
+  }
+
+  async findInstallation(installationId: number): Promise<Installation | undefined> {
+    const row = this.s.installations.get(installationId);
     return row ? { ...row } : undefined;
   }
 
-  async insertIfAbsent(installation: Installation) {
-    const existing = this.rows.get(installation.installationId);
-    if (existing) {
-      return { inserted: false, existing: { ...existing } };
+  async createTenantForInstallation(installation: Installation): Promise<void> {
+    if (this.s.installations.has(installation.installationId)) {
+      throw new Error('installation already exists');
     }
-    this.rows.set(installation.installationId, { ...installation });
-    return { inserted: true, existing: { ...installation } };
+    this.s.installations.set(installation.installationId, { ...installation });
   }
 
-  async setStatus(installationId: number, status: InstallationStatus): Promise<void> {
-    const row = this.rows.get(installationId);
+  async setInstallationStatus(installationId: number, status: InstallationStatus): Promise<void> {
+    const row = this.s.installations.get(installationId);
     if (!row) throw new Error(`unknown installation ${installationId}`);
     row.status = status;
   }
-}
 
-export class MemoryAuditStore implements AuditStore {
-  readonly events: AuditEvent[] = [];
-  async append(event: AuditEvent): Promise<void> {
-    this.events.push({ ...event, detail: { ...event.detail } });
+  async setRepositorySelection(installationId: number, selection: RepositorySelection): Promise<void> {
+    const row = this.s.installations.get(installationId);
+    if (!row) throw new Error(`unknown installation ${installationId}`);
+    row.repositorySelection = selection;
   }
-}
 
-export class MemoryDeliveryStore implements DeliveryStore {
-  private readonly processed = new Set<string>();
-  async isProcessed(deliveryId: string): Promise<boolean> {
-    return this.processed.has(deliveryId);
+  async activateRepositories(tenantId: string, installationId: number, repos: readonly RepositoryRecord[]): Promise<void> {
+    for (const r of repos) {
+      this.s.repositories.set(repoKey(tenantId, r.githubRepoId), {
+        tenantId,
+        installationId,
+        fullName: r.fullName,
+        active: true,
+      });
+    }
   }
-  async markProcessed(deliveryId: string): Promise<void> {
-    this.processed.add(deliveryId);
-  }
-}
 
-export class MemoryJobQueue implements JobQueue {
-  readonly jobs: Array<{ tenantId: string; deliveryId: string; kind: string; payload: unknown }> = [];
-  async enqueue(job: { tenantId: string; deliveryId: string; kind: string; payload: unknown }): Promise<void> {
-    this.jobs.push(job);
+  async deactivateRepositories(tenantId: string, githubRepoIds: readonly number[]): Promise<void> {
+    for (const id of githubRepoIds) {
+      const row = this.s.repositories.get(repoKey(tenantId, id));
+      if (row) row.active = false;
+    }
+  }
+
+  async isRepositoryActive(tenantId: string, githubRepoId: number): Promise<boolean> {
+    return this.s.repositories.get(repoKey(tenantId, githubRepoId))?.active === true;
+  }
+
+  async appendAudit(event: AuditEvent): Promise<void> {
+    this.s.audit.push({ ...event, detail: { ...event.detail } });
+  }
+
+  async enqueueJob(job: QueuedJob): Promise<void> {
+    this.s.jobs.push({ ...job });
   }
 }

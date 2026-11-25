@@ -6,6 +6,12 @@
   "main": "src/index.ts",
   "types": "src/index.ts",
   "dependencies": {
-    "@parmana/github-client": "workspace:*"
+    "@parmana/github-client": "workspace:*",
+    "@parmana/tenant-context": "workspace:*",
+    "fastify": "^5.12.8",
+    "pg": "^8.23.1"
+  },
+  "devDependencies": {
+    "@types/pg": "^8.23.1"
   }
 }

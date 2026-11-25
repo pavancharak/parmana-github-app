@@ -41,22 +41,20 @@ const prPayload = (installationId = 1001) => ({
 
 /** Wraps a unit of work so that writing audit events fails. Simulates a crash after other writes. */
 function withAuditFailure(inner: UnitOfWork): UnitOfWork {
+  const failing = (tx: Tx): Tx =>
+    new Proxy(tx, {
+      get(target, prop, receiver) {
+        if (prop === 'appendAudit') {
+          return async () => {
+            throw new Error('audit down');
+          };
+        }
+        return Reflect.get(target, prop, receiver) as unknown;
+      },
+    });
   return {
-    run: (fn) =>
-      inner.run((tx: Tx) =>
-        fn(
-          new Proxy(tx, {
-            get(target, prop, receiver) {
-              if (prop === 'appendAudit') {
-                return async () => {
-                  throw new Error('audit down');
-                };
-              }
-              return Reflect.get(target, prop, receiver) as unknown;
-            },
-          }),
-        ),
-      ),
+    run: (fn) => inner.run((tx) => fn(failing(tx))),
+    runForTenant: (tenantId, fn) => inner.runForTenant(tenantId, (tx) => fn(failing(tx))),
   };
 }
 

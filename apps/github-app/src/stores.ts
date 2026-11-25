@@ -57,6 +57,12 @@ export interface Tx {
 }
 
 export interface UnitOfWork {
-  /** Runs fn in one transaction. Commits when fn resolves; rolls back and rethrows when fn throws. */
+  /**
+   * Runs fn in one transaction with no tenant set. Only the webhook claim and
+   * the installation lookup use this. Tenant tables return no rows here (RLS, fail closed).
+   * Tenant-scoped work sets the tenant with `runForTenant` or after a verified lookup.
+   */
   run<T>(fn: (tx: Tx) => Promise<T>): Promise<T>;
+  /** Runs fn in one transaction with app.tenant_id set to tenantId (ADR-0003). */
+  runForTenant<T>(tenantId: string, fn: (tx: Tx) => Promise<T>): Promise<T>;
 }

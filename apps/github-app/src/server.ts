@@ -6,7 +6,12 @@ import { handleWebhook, type WebhookDeps, type WebhookResult } from './webhook.j
  * signature check and returns only the outcome code to the sender. Tenant IDs
  * and internal details are not included in responses.
  */
-export function buildServer(deps: WebhookDeps): FastifyInstance {
+export interface ServerDeps extends WebhookDeps {
+  /** Reports whether dependencies (the database) are reachable. Used by /readyz. */
+  readonly readiness?: () => Promise<boolean>;
+}
+
+export function buildServer(deps: ServerDeps): FastifyInstance {
   const app = Fastify({ logger: false, bodyLimit: 1024 * 1024 });
 
   // Keep the body as raw bytes for every content type. The signature covers exact bytes.
@@ -31,6 +36,11 @@ export function buildServer(deps: WebhookDeps): FastifyInstance {
   });
 
   app.get('/healthz', async () => ({ status: 'ok' }));
+
+  app.get('/readyz', async (_req, reply) => {
+    const ready = deps.readiness ? await deps.readiness() : true;
+    return reply.code(ready ? 200 : 503).send({ status: ready ? 'ready' : 'not_ready' });
+  });
 
   app.setErrorHandler(async (_err, _req, reply) => {
     // Never expose internals. The sender only learns that processing failed,

@@ -45,6 +45,14 @@ export class MemoryUnitOfWork implements UnitOfWork {
     this.committed = draft;
     return result;
   }
+
+  /**
+   * The memory adapter does not enforce tenant isolation. The PostgreSQL adapter
+   * does, through RLS (TEN-012). Tests for isolation run against PostgreSQL.
+   */
+  async runForTenant<T>(_tenantId: string, fn: (tx: Tx) => Promise<T>): Promise<T> {
+    return this.run(fn);
+  }
 }
 
 class MemoryTx implements Tx {

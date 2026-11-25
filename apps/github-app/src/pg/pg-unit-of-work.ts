@@ -12,10 +12,20 @@ export class PgUnitOfWork implements UnitOfWork {
   constructor(private readonly pool: Pool) {}
 
   async run<T>(fn: (tx: Tx) => Promise<T>): Promise<T> {
+    return this.execute(undefined, fn);
+  }
+
+  async runForTenant<T>(tenantId: string, fn: (tx: Tx) => Promise<T>): Promise<T> {
+    return this.execute(tenantId, fn);
+  }
+
+  private async execute<T>(tenantId: string | undefined, fn: (tx: Tx) => Promise<T>): Promise<T> {
     const client = await this.pool.connect();
     try {
       await client.query('BEGIN');
-      const result = await fn(new PgTx(client));
+      const tx = new PgTx(client);
+      if (tenantId !== undefined) await tx.setTenant(tenantId);
+      const result = await fn(tx);
       await client.query('COMMIT');
       return result;
     } catch (err) {
@@ -46,6 +56,11 @@ const toInstallation = (r: InstallationRow): Installation => ({
 class PgTx implements Tx {
   constructor(private readonly c: PoolClient) {}
 
+  /** Sets app.tenant_id for this transaction only (is_local = true). */
+  async setTenant(tenantId: string): Promise<void> {
+    await this.c.query("SELECT set_config('app.tenant_id', $1, true)", [tenantId]);
+  }
+
   async claimDelivery(deliveryId: string): Promise<boolean> {
     const res = await this.c.query(
       'INSERT INTO webhook_deliveries (delivery_id) VALUES ($1) ON CONFLICT (delivery_id) DO NOTHING',
@@ -58,16 +73,22 @@ class PgTx implements Tx {
     await this.c.query('SELECT pg_advisory_xact_lock($1::bigint)', [installationId]);
   }
 
+  /**
+   * Bootstrap lookup through the SECURITY DEFINER function, since RLS needs the
+   * tenant and the tenant is what we are looking up. Once found, the tenant is
+   * set for this transaction, so every later statement is tenant-scoped.
+   */
   async findInstallation(installationId: number): Promise<Installation | undefined> {
-    const res = await this.c.query<InstallationRow>(
-      'SELECT tenant_id, installation_id, github_account_id, repository_selection, status FROM github_installations WHERE installation_id = $1',
-      [installationId],
-    );
+    const res = await this.c.query<InstallationRow>('SELECT * FROM lookup_installation($1::bigint)', [installationId]);
     const row = res.rows[0];
-    return row ? toInstallation(row) : undefined;
+    if (!row) return undefined;
+    await this.setTenant(row.tenant_id);
+    return toInstallation(row);
   }
 
   async createTenantForInstallation(i: Installation): Promise<void> {
+    // The tenant is set before its row is written, so the WITH CHECK policies accept it.
+    await this.setTenant(i.tenantId);
     await this.c.query('INSERT INTO tenants (id) VALUES ($1)', [i.tenantId]);
     await this.c.query(
       'INSERT INTO github_installations (installation_id, tenant_id, github_account_id, repository_selection, status) VALUES ($1, $2, $3, $4, $5)',

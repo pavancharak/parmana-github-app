@@ -15,7 +15,7 @@ export class RepositoryAccessDeniedError extends Error {
  * is refused before any API request is made.
  */
 export async function assertRepositoryAccess(uow: UnitOfWork, ctx: TenantContext, githubRepoId: number): Promise<void> {
-  const active = await uow.run((tx) => tx.isRepositoryActive(ctx.tenantId, githubRepoId));
+  const active = await uow.runForTenant(ctx.tenantId, (tx) => tx.isRepositoryActive(ctx.tenantId, githubRepoId));
   if (!active) {
     throw new RepositoryAccessDeniedError(githubRepoId);
   }

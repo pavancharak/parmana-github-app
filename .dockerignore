@@ -1,0 +1,10 @@
+node_modules
+**/node_modules
+.git
+.env
+.env.*
+*.pem
+docs
+**/test
+**/*.test.ts
+coverage

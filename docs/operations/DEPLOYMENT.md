@@ -69,3 +69,42 @@ No production data is copied to non-production environments.
 | Synthetic evaluation end to end | Check Run created; evidence verifies |
 
 A failed readiness check blocks traffic. A failed synthetic evaluation triggers rollback review.
+
+## 9. Current deployment state (Phase 1)
+
+Status of each item, as of 2026-11-25. Only items marked *verified* were run.
+
+| Item | Status | Evidence |
+| --- | --- | --- |
+| Entrypoint (`apps/github-app/src/main.ts`) | verified: started against PostgreSQL 16, served `/healthz`, `/readyz`, a signed webhook (202), its replay (200) and a bad signature (401), and shut down on SIGTERM | run recorded in `docs/testing/results/` |
+| Migration CLI (`apps/github-app/src/migrate-cli.ts`) | verified: applies pending migrations with the migration role, idempotent | live run |
+| Container image (`Dockerfile`, Node 24) | **not built**: no Docker daemon reachable in the build sandbox | none |
+| Local stack (`docker-compose.yml`) | **not run**: depends on the image | none |
+| Postgres init (`docker/postgres-init/`) | **not run**: depends on the compose stack | none |
+
+### Configuration
+
+| Variable | Used by | Purpose |
+| --- | --- | --- |
+| `DATABASE_URL` | app | Connection as `parmana_app` (non-owner, no BYPASSRLS). Required. |
+| `MIGRATION_DATABASE_URL` | migrate | Connection as the migration owner. Used only when migrating. |
+| `RUN_MIGRATIONS` | app | `true` to migrate on start. Production should run the migrate job separately. |
+| `GITHUB_WEBHOOK_SECRET` | app | Secret set on the GitHub App. Required. |
+| `PORT` | app | Listen port. Default 8080. |
+| `DATABASE_POOL_MAX` | app | Pool size. Default 10. |
+
+Secrets come only from the environment. Nothing is printed on startup, and startup errors print only the error name.
+
+### Role setup (operations, once per database)
+
+1. Create `parmana_app` with LOGIN and a password. Migration `0002_rls.sql` creates the role as NOLOGIN only if it is missing, so create it first. The local init script does this.
+2. Run migrations as the owner role.
+3. Connect the application only as `parmana_app`. Never use the owner role for the app.
+
+### Known limitations
+
+- The runtime runs TypeScript directly through `tsx`. A compiled build is a follow-up.
+- TLS termination is not configured. Terminate TLS at the load balancer.
+- Installation private key handling is not wired. Token minting is implemented and tested, but no secret store is connected.
+- Row-level security is not forced on the table owner, by design. Owner-only operations and the lookup function depend on this (see `0002_rls.sql`).
+- The webhook body limit is 1 MiB. Measure real payloads before production.

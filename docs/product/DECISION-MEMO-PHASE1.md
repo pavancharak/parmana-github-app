@@ -78,12 +78,12 @@ Mark one option per decision. Then the owner signs below. Each marked decision i
 
 | Decision | A | B | Other (describe) |
 | --- | --- | --- | --- |
-| D1 Tenant identity (OD-02) | [ ] | [ ] | |
-| D2 Core integration (OD-03) | [ ] | [ ] | |
-| D3 Queue (ADR-0004) | [ ] | [ ] | [ ] C |
-| D4 Database access (ADR-0005) | [ ] | [ ] | |
+| D1 Tenant identity (OD-02) | [x] | [ ] | |
+| D2 Core integration (OD-03) | [ ] | [x] | |
+| D3 Queue (ADR-0004) | [x] | [ ] | [ ] C |
+| D4 Database access (ADR-0005) | [x] | [ ] | |
 
-Owner: ______________________  Date: ____________
+Owner: Pavan Charak (confirmed in chat, 2026-11-25)  Date: 2026-11-25
 
 Core maintainers confirmation for D2: ______________________  Date: ____________
 

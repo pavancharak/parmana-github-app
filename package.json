@@ -10,11 +10,16 @@
   "scripts": {
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test:unit": "vitest run",
-    "test": "pnpm run typecheck && pnpm run test:unit"
+    "test": "pnpm run typecheck && pnpm run test:unit",
+    "test:integration": "vitest run apps/github-app/test/pg.integration.test.ts",
+    "start": "node --import tsx apps/github-app/src/main.ts"
   },
   "devDependencies": {
     "@types/node": "^22.10.0",
     "typescript": "^5.7.0",
     "vitest": "^3.0.0"
+  },
+  "dependencies": {
+    "tsx": "^4.19.0"
   }
 }

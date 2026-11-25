@@ -24,3 +24,18 @@ Parmana reports what is *declared* in repositories. It does not prove what an ag
 ## Build order
 
 Code is not started until the Phase 0 exit checklist in `docs/README.md` is complete. Implementation then follows the phases in `docs/product/PRD.md` and the exit gates in `docs/operations/PRODUCTION-READINESS.md`.
+
+## Running the code (Phase 1)
+
+Requirements: Node 22 or later (Node 24 is the target in the specification), pnpm 10.
+
+```
+pnpm install
+pnpm run typecheck
+pnpm run test:unit                    # database tests are skipped without PG_ADMIN_URL
+PG_ADMIN_URL=postgres://postgres@127.0.0.1:5432/postgres pnpm run test:integration
+```
+
+`PG_ADMIN_URL` must point to a PostgreSQL role that can create and drop databases. Each run creates its own database and drops it afterward. Migrations live in `database/migrations/` and are applied by `apps/github-app/src/pg/migrate.ts`.
+
+Status: webhook handling, installation lifecycle, repository selection, PostgreSQL persistence with row-level security, HTTP receipt, installation tokens (in memory only), repository discovery, and Check Run publication are implemented and tested. The container image and local compose stack are written but not built here. Not yet verified: any run against the real GitHub API, and the image on Node 24. See `docs/testing/results/` and `docs/operations/DEPLOYMENT.md`.

@@ -67,7 +67,7 @@ Tenant identity is never accepted as a request field. The tenant is determined b
 
 ### 5.1 Policy adapter → Parmana Core
 
-Request (logical contract; transport per OD-03):
+Request (HTTPS with JSON bodies over mutual TLS to the Core service, per ADR-0001 item 5):
 
 ```json
 {

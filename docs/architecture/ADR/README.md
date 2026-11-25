@@ -19,8 +19,8 @@ Decision owner: name
 
 | ADR | Title | Status |
 | --- | --- | --- |
-| [ADR-0001](ADR-0001-core-is-authority.md) | Parmana Core is the sole authorization and signing authority | Proposed |
-| [ADR-0002](ADR-0002-fail-closed.md) | Fail closed on evaluation and evidence failures | Proposed |
-| [ADR-0003](ADR-0003-tenant-context.md) | Explicit tenant context with composite keys and RLS | Proposed |
-| [ADR-0004](ADR-0004-queue.md) | Durable queue technology | Proposed (decision required; see OD-03) |
-| [ADR-0005](ADR-0005-database-access.md) | Database access layer | Proposed (decision required) |
+| [ADR-0001](ADR-0001-core-is-authority.md) | Parmana Core is the sole authorization and signing authority, called as a separate service | Accepted (2026-11-25) |
+| [ADR-0002](ADR-0002-fail-closed.md) | Fail closed on evaluation and evidence failures | Accepted (2026-11-25) |
+| [ADR-0003](ADR-0003-tenant-context.md) | Explicit tenant context with composite keys and row-level security | Accepted (2026-11-25) |
+| [ADR-0004](ADR-0004-queue.md) | PostgreSQL transactional outbox as the durable queue, behind a `JobQueue` interface | Accepted (2026-11-25) |
+| [ADR-0005](ADR-0005-database-access.md) | Drizzle with reviewed SQL migrations | Accepted (2026-11-25) |

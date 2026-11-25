@@ -72,6 +72,8 @@ Four decisions must be made before Phase 1 code starts. Each section gives the q
 
 ## Decision record
 
+**Recorded outcome (2026-11-25).** The owner directed that the best long-term options be chosen. Outcome: D1 **A**, D2 **B**, D3 **A**, D4 **A**. D2 differs from the recommendation in this memo, which favored the in-process SDK for Release 1.0. The reason for the change is in ADR-0001 item 5 and its alternatives section. The ADRs are the authoritative record. The boxes below remain for the owner's signature.
+
 Mark one option per decision. Then the owner signs below. Each marked decision is recorded in `OPEN-DECISIONS.md` with the date, and ADR-0001, ADR-0003, ADR-0004 or ADR-0005 is updated to Accepted, as applicable.
 
 | Decision | A | B | Other (describe) |

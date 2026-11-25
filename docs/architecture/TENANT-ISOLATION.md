@@ -13,7 +13,7 @@ Violation of this invariant is a release-blocking defect (PRD §7, NFR-07).
 
 - Tenant identity is **derived** from the verified GitHub installation, never from client input (AC-02.2).
 - The tenant record is created once per GitHub installation ID (AC-01.1).
-- Whether the internal tenant key is a UUID mapped to the GitHub organization ID or the organization ID itself is decided in OD-02. Recommendation: internal UUID with a unique mapping, so that an organization that is re-installed or renamed does not change Parmana identity.
+- **Decided (2026-11-25, OD-02):** the internal tenant key is a UUID with a unique mapping to the GitHub organization ID. An organization that is renamed or re-installed keeps its Parmana identity.
 
 ## 3. Tenant context object
 
@@ -68,7 +68,7 @@ Rules:
 
 - Each tenant has its own signing key alias (e.g. `alias/parmana/tenant/<uuid>`).
 - Rotation creates a new key version for that tenant only. Historical evidence stays verifiable by retained public keys (CRY-009, TEN-009).
-- No tenant's key is usable by another tenant's context, enforced by KMS key policy and by the application's key-resolution function.
+- No tenant's key is usable by another tenant's context, enforced by KMS key policy and by Core's key-resolution function. Core is the only holder of signing access (ADR-0001).
 
 ## 8. Cross-tenant attack surface
 

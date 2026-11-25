@@ -127,7 +127,7 @@ API (apps/api) and Dashboard (apps/dashboard) sit beside workers and read/write 
 
 ## 8. Deployment shape
 
-Described in `operations/DEPLOYMENT.md`. Summary: stateless API and worker containers; managed PostgreSQL; durable managed queue (or Redis with persistence and BullMQ, per OD-03 and stack decision in ADR-0004); KMS; OpenTelemetry export.
+Described in `operations/DEPLOYMENT.md`. Summary: stateless API and worker containers; managed PostgreSQL, which also hosts the job outbox (ADR-0004); Parmana Core as a separately deployed service (ADR-0001); KMS; OpenTelemetry export.
 
 ## 9. Technology stack
 
@@ -138,8 +138,8 @@ Described in `operations/DEPLOYMENT.md`. Summary: stateless API and worker conta
 | Web framework | Fastify | Accepted (spec) |
 | Dashboard | Next.js, React, TypeScript | Open (OD-12) |
 | Database | PostgreSQL | Accepted (spec) |
-| Database access | Prisma or Drizzle | Open; decide in ADR-0005 before Phase 1 |
-| Queue | Redis + BullMQ or managed durable queue | Open; decide in ADR-0004 |
+| Database access | Drizzle | Accepted (ADR-0005) |
+| Queue | PostgreSQL transactional outbox behind a `JobQueue` interface | Accepted (ADR-0004) |
 | Auth | GitHub OAuth plus server-side sessions | Accepted (spec) |
 | Crypto | Parmana Core packages | Accepted (spec) |
 | Signing keys | AWS KMS | Open (OD-05) |

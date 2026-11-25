@@ -56,7 +56,7 @@ No production data is copied to non-production environments.
 ## 7. Network
 
 - Webhook endpoint is public; API and dashboard are behind TLS with HSTS.
-- Worker egress is restricted to GitHub API, Core endpoints (if networked), KMS and the telemetry collector. No other egress (threat T-06).
+- Worker egress is restricted to the GitHub API, the Core service, KMS and the telemetry collector. No other egress (threat T-06).
 - Database is reachable only from application subnets.
 
 ## 8. Deployment verification

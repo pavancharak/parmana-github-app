@@ -1,6 +1,6 @@
 # ADR-0005: Database access layer
 
-Status: Proposed — decision required before Phase 1
+Status: Accepted (2026-11-25, owner decision): Drizzle
 Date: 2026-11-25
 Decision owner: Pavan Charak
 
@@ -17,6 +17,9 @@ The spec lists Prisma or Drizzle. Composite keys, row-level security, `SET LOCAL
 
 Drizzle, with migrations as reviewed SQL files in `database/migrations/`. Raw SQL is acceptable for RLS policies and immutability grants.
 
-## Decision needed
+## Decision
 
-Owner to confirm.
+Drizzle, with reviewed SQL migrations in `database/migrations/`, accepted as the long-term database access layer.
+
+- RLS policies, immutability grants and the `SET LOCAL app.tenant_id` pattern are written as reviewed SQL (ADR-0003).
+- Prisma is not used. Changing the access layer requires a superseding ADR.

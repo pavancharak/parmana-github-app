@@ -1,6 +1,6 @@
 # ADR-0003: Explicit tenant context with composite keys and row-level security
 
-Status: Proposed
+Status: Accepted (2026-11-25, owner decision)
 Date: 2026-11-25
 Decision owner: Pavan Charak
 

@@ -56,7 +56,7 @@ Phase 0 is complete only when every item is true. Items marked *open* are tracke
 Status: the documentation baseline was merged in PR #1 (commit `ec76eb7`). The items below stay unchecked until the owner has reviewed the open decisions.
 
 - [ ] All schemas (capability, policy, evidence, webhook events) are versioned and reviewed.
-- [ ] Tenant identity model is approved by the owner.
+- [x] Tenant identity model is approved by the owner (OD-02, 2026-11-25).
 - [ ] Parmana Core integration boundary is documented and agreed with the Core maintainers.
 - [ ] GitHub App permissions are minimized and justified in `security/PERMISSION-MATRIX.md`.
 - [ ] Security invariants are documented in `security/SECURITY-BOUNDARIES.md`.

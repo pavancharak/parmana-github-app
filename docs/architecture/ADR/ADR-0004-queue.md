@@ -1,6 +1,6 @@
 # ADR-0004: Durable queue technology
 
-Status: Proposed — decision required before Phase 1
+Status: Accepted (2026-11-25, owner decision): Option A
 Date: 2026-11-25
 Decision owner: Pavan Charak
 
@@ -20,6 +20,10 @@ Webhooks must be durably queued before acknowledgement, retried with backoff and
 
 Option A for Release 1.0: transactional outbox in PostgreSQL. It keeps "accepted event" and "tenant state" in one transaction, which simplifies the no-event-loss guarantee. Revisit if measured throughput (PERF-002) cannot be met.
 
-## Decision needed
+## Decision
 
-Owner to confirm A, B or C. Until confirmed, `architecture/SYSTEM-ARCHITECTURE.md` describes the queue abstractly.
+Option A: PostgreSQL transactional outbox with leased jobs (`FOR UPDATE SKIP LOCKED`), accepted as the long-term queue.
+
+- Queue access goes through a `JobQueue` interface in `packages/`. No service calls PostgreSQL job tables directly. This keeps the option to replace the backing store with a dedicated queue through a superseding ADR, without changing callers.
+- Replacing the queue requires a new ADR and a measured result showing PERF-002 cannot be met. Speculation is not grounds for replacement.
+- Every job carries its tenant ID and idempotency key (`architecture/TENANT-ISOLATION.md` §3).

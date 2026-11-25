@@ -1,6 +1,6 @@
 # ADR-0001: Parmana Core is the sole authorization and signing authority
 
-Status: Proposed
+Status: Accepted (2026-11-25, owner decision)
 Date: 2026-11-25
 Decision owner: Pavan Charak
 
@@ -14,17 +14,19 @@ The product specification requires that Parmana Core remain the source of truth 
 2. Evidence signing and verification use Parmana Core crypto and evidence packages.
 3. The App may pre-filter (for example, reject a schema-invalid record before calling Core) but never converts a Core decision into a different decision.
 4. Core's decision format, policy digest and evidence format are consumed as versioned contracts (`api/POLICY-SCHEMA.md`, `api/EVIDENCE-SCHEMA.md`).
+5. Core runs as a **separate service** and is called through a versioned network API over mutual TLS (`api/API-CONTRACTS.md` §5). Core alone holds signing access to tenant keys. The App process never holds signing capability. This decision is the resolution of OD-03.
 
 ## Consequences
 
-- Core's API or SDK must be stable before Phase 4 (DEP-01, OD-03).
+- Core's API must be stable before Phase 4 (DEP-01). Contract version 1.0 is frozen with this ADR.
+- Core is deployed and scaled independently, and must meet the 500 ms evaluation budget (NFR-03) across the network.
 - A Core outage produces fail-closed results (ADR-0002).
 - Cross-repository change coordination is required when Core's contract changes.
 
 ## Alternatives considered
 
 - Implement a local policy evaluator in the App: rejected, creates a second authority and duplicates audit scope.
-- Embed Core as a library only: accepted as one of the two integration modes in OD-03, not a separate architecture.
+- In-process SDK (the earlier Phase 0 recommendation): rejected for the long term. It places tenant signing access inside the App process, which weakens boundaries B6 and B8 in `architecture/SYSTEM-ARCHITECTURE.md`, and it couples Core's release cadence to the App's. The network boundary costs latency and one more service, which we accept.
 
 ## Tests or documents affected
 

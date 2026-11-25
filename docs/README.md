@@ -53,6 +53,8 @@ If two documents conflict, the conflict is a defect. Record it in `product/OPEN-
 
 Phase 0 is complete only when every item is true. Items marked *open* are tracked in `product/OPEN-DECISIONS.md`.
 
+Status: the documentation baseline was merged in PR #1 (commit `ec76eb7`). The items below stay unchecked until the owner has reviewed the open decisions.
+
 - [ ] All schemas (capability, policy, evidence, webhook events) are versioned and reviewed.
 - [ ] Tenant identity model is approved by the owner.
 - [ ] Parmana Core integration boundary is documented and agreed with the Core maintainers.

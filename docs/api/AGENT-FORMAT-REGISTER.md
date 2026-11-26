@@ -55,7 +55,7 @@ Pages were fetched on 2026-11-26 from the URLs listed here only. Quotes are copi
 - "A plain `.md` file in `.cursor/rules` is ignored by the rules system"
 - Nested rules: "Organize rules in folders" (example `frontend/components.mdc`). How subfolder rules apply is not stated.
 - AGENTS.md: "Cursor supports AGENTS.md in the project root and subdirectories." and "Instructions from nested `AGENTS.md` files are combined with parent directories"
-- Legacy `.cursorrules`: not stated on these pages.
+- Legacy `.cursorrules`: not stated on these pages. The owner also pasted the current Cursor rules page (cursor.com/docs/rules, 2026-11-26), which does not mention `.cursorrules` either. Its status stays unverified.
 
 ### OpenAI Codex: not verified
 

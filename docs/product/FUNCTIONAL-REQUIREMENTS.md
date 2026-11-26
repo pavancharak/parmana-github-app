@@ -201,3 +201,14 @@ Users see only their organization's data. Dashboard counts reconcile with underl
 6. Evidence export history.
 7. Data retention controls.
 8. Tenant suspension and deletion workflows.
+
+## FR-14: Dry-run mode (proposed, pilot)
+
+**Purpose:** let a team see what Parmana would block before Parmana can block anything.
+
+1. A repository can be set to dry-run. Evaluations run, and results are recorded and shown in the check output.
+2. In dry-run, the published check never has a failure conclusion. It reports `neutral` with the would-be result in its summary.
+3. Dry-run is set per repository and recorded in the audit history when changed.
+4. Switching a repository from dry-run to enforced requires an owner action and an audit entry.
+
+Acceptance: a pull request that would fail in enforced mode shows `neutral` in dry-run, and its summary names the change that would have failed.

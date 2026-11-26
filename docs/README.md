@@ -43,6 +43,9 @@ If two documents conflict, the conflict is a defect. Record it in `product/OPEN-
 | `testing/` | [TEST-CASES.md](testing/TEST-CASES.md) | UT, GH, AUTH, TEN, CRY test case catalogue |
 | `testing/` | [E2E-SCENARIOS.md](testing/E2E-SCENARIOS.md) | End-to-end customer journeys E2E-001 to E2E-007 |
 | `testing/` | [SECURITY-TEST-PLAN.md](testing/SECURITY-TEST-PLAN.md) | Security assessments and attack suites |
+| `product/` | [GAP-REGISTER.md](product/GAP-REGISTER.md) | Everything still to build, with blockers and done-when tests |
+| `product/` | [VALUE-PROPOSITION.md](product/VALUE-PROPOSITION.md) | Value proposition, with the status of each claim |
+| `architecture/ADR/` | [ADR-0006](architecture/ADR/ADR-0006-pilot-scope.md) | Pilot scope before Release 1.0 (proposed) |
 | `operations/` | [DEPLOYMENT.md](operations/DEPLOYMENT.md) | Environments, release and rollback |
 | `operations/` | [MONITORING.md](operations/MONITORING.md) | Metrics, logs, traces, alerts |
 | `operations/` | [BACKUP-RECOVERY.md](operations/BACKUP-RECOVERY.md) | Backup, restore, RPO and RTO targets |

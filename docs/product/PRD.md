@@ -153,3 +153,22 @@ This keeps the first release from becoming an oversized AI security platform.
 | DEP-03 | AWS KMS (or equivalent) is available for tenant signing keys | Signing design changes | OD-05 |
 | DEP-04 | Customers configure branch protection or rulesets to require the Check Run | Merge prevention not guaranteed by Parmana | PRD §2, E2E-002 |
 | ASM-01 | Supported configuration formats are documented before parsers are written | Discovery scope unbounded | FR-03, OD-01 |
+
+## 14. Pilot milestone (proposed)
+
+Status: proposed on 2026-11-26, pending owner decision (see `architecture/ADR/ADR-0006-pilot-scope.md`).
+
+Before Release 1.0, deliver a pilot that proves the core story with one design partner:
+
+| Area | Pilot | Release 1.0 |
+| --- | --- | --- |
+| Repositories | One, chosen by the partner | All selected repositories |
+| Settings format | `.claude/settings.json` only | All formats in §3 |
+| Rule | One rule: a deploy, shell or outbound network grant needs one named approver | Full policy engine with precedence |
+| Enforcement | Dry-run for two weeks, then owner decision | Enforced through branch rules |
+| Approval | Manual, through an internal endpoint, bound to the commit | Full workflow with expiry, replay protection and separation of duties |
+| Records | Stored, marked unsigned | Signed, chained, exportable, verifiable offline |
+| Access | One administrator, GitHub sign-in | Role-based access for all personas |
+| Screens | None | Full dashboard |
+
+Pilot exit: E2E-002 and E2E-003 pass on a real test pull request, and the partner completes two weeks of dry-run.

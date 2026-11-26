@@ -5,7 +5,7 @@ A decision is **open** until an ADR is accepted (`architecture/ADR/`) or the own
 
 | ID | Decision needed | Options | Blocks | Owner | Status |
 | --- | --- | --- | --- | --- | --- |
-| OD-01 | Exact list of supported configuration formats and their versions for Release 1.0 | Minimal set (Claude Code, AGENTS.md, Copilot instructions, MCP JSON, workflows) or extended | Phase 2 | Pavan Charak | Open |
+| OD-01 | Exact list of supported configuration formats and their versions for Release 1.0 | Minimal set (Claude Code, AGENTS.md, Copilot instructions, MCP JSON, workflows) or extended. Proposed for the pilot: `.claude/settings.json` only (ADR-0006) | Phase 2 | Pavan Charak | Open (pilot proposal: `.claude/settings.json`) |
 | OD-02 | Tenant identity model: is the GitHub organization ID the only tenant key, or is a Parmana-internal tenant ID mapped to it? | (a) Internal UUID mapped to GitHub org ID; (b) GitHub org ID as primary key | Phase 0 exit | Pavan Charak | Open (recommendation: a) |
 | OD-03 | Parmana Core integration mode | (a) In-process SDK package; (b) network API with Core as a separate service | Phase 4 | Pavan Charak with Core maintainers | Open |
 | OD-04 | Human approval identity for approvers | GitHub OAuth only; GitHub OAuth plus step-up or signed approval | Phase 5 | Pavan Charak | Open |
@@ -19,6 +19,7 @@ A decision is **open** until an ADR is accepted (`architecture/ADR/`) or the own
 | OD-12 | Dashboard framework | Next.js per spec; confirm hosting | Phase 6 | Pavan Charak | Open (spec default: Next.js) |
 | OD-13 | Representation of "production access" in policy. The spec's example uses `capability: production_access`, which is not in the capability enum | (a) Map to `secret_access` or `external_service` with a `target` attribute; (b) add a `production_access` capability type in CAPABILITY-SCHEMA v1.1 | Phase 3 | Pavan Charak | Open (recommendation: a) |
 | OD-14 | Queue and database access technology | See ADR-0004 and ADR-0005 | Phase 1 | Pavan Charak | Open |
+| OD-15 | Pilot scope: approve the pilot definition in ADR-0006 (one repository, one format, one rule, dry-run, manual approval, unsigned records) | Approve as written; or change one item | Pilot start | Pavan Charak | Open (proposed 2026-11-26) |
 
 ## Resolution procedure
 

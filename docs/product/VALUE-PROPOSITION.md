@@ -38,6 +38,10 @@ Know which AI agents can act in your repositories, whether their permissions hav
 
 Status of these claims: the GitHub integration, webhook handling, and check publication are implemented and tested. Policy evaluation, signing and offline verification are specified but not yet built. Customer-facing copy must say so until they are.
 
+## Pilot status
+
+The pilot (ADR-0006, accepted 2026-11-26) covers one repository, one settings format and one rule, with dry-run and unsigned records. Benefits that need signed records, the dashboard, or more than one format are Release 1.0 claims and must not be used in pilot material.
+
 ## Non-claims for customer material
 
 Use the wording in `docs/security/SECURITY-BOUNDARIES.md` §2. In particular, do not say that Parmana proves what an agent executed, or that it prevents merges on its own.

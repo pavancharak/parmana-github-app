@@ -75,3 +75,21 @@ The cause is not yet known. A support case is the next step. Text for the case:
 - The app connects to RDS with TLS but doesn't verify the server certificate. The RDS CA bundle should be added to the image.
 - The admin URL secret holds the RDS-managed admin password as a copy. If RDS rotates that password, the copy must be updated.
 - The image was built on GitHub Actions. Docker is not available in the sandbox.
+
+## Account change log
+
+Account-level changes made during the deployment. Recorded so the account state can be traced later. Times are local (IST).
+
+| Date (2026) | Time | Change | Region | Reason |
+| --- | --- | --- | --- | --- |
+| 11-26 | 07:14 | Support plan upgraded to Business Support+ (My account), via root user | global | Technical support for the App Runner blocker |
+| 11-26 | 07:22 | Manual snapshot `dip` created from `dip-postgres` | us-east-1 | Final snapshot before deletion |
+| 11-26 | 07:23 | `dip-postgres` deletion protection turned off | us-east-1 | Needed to allow deletion |
+| 11-26 | 07:37 | Manual snapshot `dip` deleted | us-east-1 | Owner requested complete deletion |
+| 11-26 | 07:38 | `dip-postgres` deleted, with no final snapshot and no retained automated backups | us-east-1 | Owner requested complete deletion |
+
+`dip-postgres` belongs to a separate project (`dip-*`). It was flagged by Trusted Advisor as unencrypted. Its deletion was requested and approved by the account owner. Nothing in the Parmana deployment depends on it.
+
+Checked afterwards: no databases in us-east-1, no current-region automated backups, and the Retained and Replicated backup tabs are empty.
+
+Parmana resources (`parmana-db`, the ECR repository, the secrets, and the App Runner roles) were not changed by these actions.

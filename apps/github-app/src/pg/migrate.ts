@@ -36,3 +36,19 @@ export async function migrate(pool: Pool, migrationsDir: string): Promise<string
   }
   return applied;
 }
+
+/**
+ * Sets the password for the parmana_app login role. Migration 0002 creates
+ * the role without a login. The password is passed as a value and quoted by
+ * PostgreSQL, so it is never interpolated into SQL text.
+ */
+export async function setAppRolePassword(pool: Pool, password: string): Promise<void> {
+  if (password.length === 0) throw new Error('APP_DB_PASSWORD is empty');
+  const res = await pool.query<{ stmt: string }>(
+    "SELECT format('ALTER ROLE parmana_app LOGIN PASSWORD %L', $1::text) AS stmt",
+    [password],
+  );
+  const stmt = res.rows[0]?.stmt;
+  if (stmt === undefined) throw new Error('could not build role statement');
+  await pool.query(stmt);
+}

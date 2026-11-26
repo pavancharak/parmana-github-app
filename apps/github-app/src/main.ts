@@ -3,13 +3,14 @@ import { fileURLToPath } from 'node:url';
 import { Pool } from 'pg';
 import { buildServer } from './server.js';
 import { PgUnitOfWork } from './pg/pg-unit-of-work.js';
-import { migrate } from './pg/migrate.js';
+import { migrate, setAppRolePassword } from './pg/migrate.js';
 
 /**
  * Process entry point. Configuration comes only from the environment.
  *
  * DATABASE_URL            Connection string for the application role (parmana_app). Required.
  * MIGRATION_DATABASE_URL  Connection string for the migration role. Needed only with RUN_MIGRATIONS=true.
+ * APP_DB_PASSWORD        Password for the parmana_app login role. Needed only with RUN_MIGRATIONS=true.
  * RUN_MIGRATIONS          "true" to apply migrations before serving. Production runs migrations as a separate job.
  * GITHUB_WEBHOOK_SECRET   Secret configured on the GitHub App. Required.
  * PORT                    Listen port. Default 8080.
@@ -41,6 +42,9 @@ async function main(): Promise<void> {
     try {
       const applied = await migrate(migrator, MIGRATIONS_DIR);
       console.log(`migrations applied: ${applied.length}`);
+      // The app role has no login until a password is set. Set it on every start, so a rotated password takes effect.
+      await setAppRolePassword(migrator, required('APP_DB_PASSWORD'));
+      console.log('application role password set');
     } finally {
       await migrator.end();
     }

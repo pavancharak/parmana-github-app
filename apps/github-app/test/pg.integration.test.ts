@@ -5,7 +5,7 @@ import { Pool, type QueryResultRow } from 'pg';
 import { computeWebhookSignature } from '@parmana/github-client';
 import { handleWebhook, type WebhookRequest } from '../src/webhook.js';
 import { PgUnitOfWork } from '../src/pg/pg-unit-of-work.js';
-import { migrate } from '../src/pg/migrate.js';
+import { migrate, setAppRolePassword } from '../src/pg/migrate.js';
 import { assertRepositoryAccess, RepositoryAccessDeniedError } from '../src/access.js';
 import type { Tx, UnitOfWork } from '../src/stores.js';
 
@@ -130,6 +130,32 @@ describe.skipIf(!ADMIN_URL)('PostgreSQL adapter and row-level security (ADR-0003
   it('migrations apply once and re-running them applies nothing', async () => {
     expect(await migrate(adminPool, MIGRATIONS)).toEqual([]);
     expect(await adminCount('schema_migrations', "version IN ('0001_phase1_core.sql', '0002_rls.sql')")).toBe(2);
+  });
+
+  it('setAppRolePassword lets parmana_app log in with a value containing quotes and symbols', async () => {
+    const pw = "p'w\"d $1 %s;--";
+    const target = new URL(ADMIN_URL as string);
+    try {
+      await setAppRolePassword(adminPool, pw);
+      // Connection fields are passed separately, so characters such as % are not parsed as URL escapes.
+      const probe = new Pool({
+        host: target.hostname,
+        port: Number(target.port),
+        database: dbName,
+        user: 'parmana_app',
+        password: pw,
+        max: 1,
+      });
+      try {
+        const res = await probe.query<{ current_user: string }>('SELECT current_user');
+        expect(res.rows[0]?.current_user).toBe('parmana_app');
+      } finally {
+        await probe.end();
+      }
+    } finally {
+      // Restore the test password, even when the assertions above fail.
+      await setAppRolePassword(adminPool, APP_TEST_PASSWORD);
+    }
   });
 
   it('audit_events rejects UPDATE and DELETE, including from the app role (AC-13.2)', async () => {

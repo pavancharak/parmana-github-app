@@ -32,6 +32,7 @@ Status key: **Decided** (owner decision recorded), **Decided, confirmation pendi
 | 2026-11-25 | D1 tenant identity (OD-02), D3 queue (OD-14), D4 database access (OD-14) accepted; D2 Core integration (OD-03) accepted, pending Core confirmation | `DECISION-MEMO-PHASE1.md` on `claude/phase1-decision-memo` |
 | 2026-11-26 | OD-01, OD-04 to OD-13, OD-15 decided | This file, ADR-0008 |
 | 2026-11-26 | Plan entitlements and report-only mode | ADR-0007 |
+| 2026-11-26 | Decision-record retention per plan: Pilot 3 days, Team 7 days, Business 60 days, Enterprise custom by contract. Periods are proposed; counsel review under OD-06 is still required before publication | `PRICING.md` (owner decision, recorded here) |
 
 ## Resolution procedure
 

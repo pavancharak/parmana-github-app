@@ -1,7 +1,7 @@
 # Data Model
 
-Document version: 1.0
-Status: Proposed. Column-level DDL is produced in Phase 0 from this document and lives in `database/schema/`.
+Document version: 1.1
+Status: Proposed. Ownership decision: option 1 (Parmana Core provides the tenant field and the evidence, audit, policy and approval tables; the app owns the GitHub tables). Pending owner acceptance. Column-level DDL is produced in Phase 0 from this document and lives in `database/schema/`.
 
 ## 1. Rules that apply to every table
 
@@ -12,7 +12,18 @@ Status: Proposed. Column-level DDL is produced in Phase 0 from this document and
 5. **No secrets.** Tokens, private keys and secret values are never stored in these tables. Installation tokens are short-lived and held in memory only.
 6. **Versioned schemas.** Every JSON payload column carries a `schema_version`.
 
-## 2. Entities
+## 2. Ownership
+
+Under option 1, Parmana Core owns the evidence, audit, policy and approval tables, and the app owns the GitHub tables. Core must add tenant scoping before the app uses its database. This follows `docs/architecture/ADR/ADR-0001-core-is-authority.md` and Core's ADR-0021.
+
+| Owner | Tables |
+| --- | --- |
+| **Core** (added by Core, not defined in the app) | `evidence_records`, `evidence_keys`, `audit_events`, `policies`, `policy_versions`, `approval_requests`, `approvals`, `capability_baselines`, `capability_baseline_versions` |
+| **App** | `tenants`, `github_installations`, `installation_events`, `repositories`, `users`, `memberships`, `agents`, `agent_configurations`, `capabilities`, `scans`, `drift_findings`, `pull_request_evaluations`, `webhook_events`, `notifications` |
+
+Entity rows marked Core below are kept as the requirements Core must meet, not as app tables.
+
+## 2a. Entities
 
 | Entity | Purpose | Key | Notes |
 | --- | --- | --- | --- |

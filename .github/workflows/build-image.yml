@@ -1,0 +1,45 @@
+name: Build and push image
+
+# Manual only. Builds the Dockerfile and pushes it to ECR in ap-south-1 (Mumbai).
+# Needs repository secrets AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY for the parmana-deployer user.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      AWS_REGION: ap-south-1
+      ECR_REPO: parmana-github-app
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    steps:
+      - name: Check out
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Log in to ECR
+        run: |
+          set -euo pipefail
+          ACCOUNT=$(aws sts get-caller-identity --query Account --output text)
+          aws ecr get-login-password --region "$AWS_REGION" \
+            | docker login --username AWS --password-stdin "$ACCOUNT.dkr.ecr.$AWS_REGION.amazonaws.com"
+          echo "REGISTRY=$ACCOUNT.dkr.ecr.$AWS_REGION.amazonaws.com" >> "$GITHUB_ENV"
+
+      - name: Build and push
+        run: |
+          set -euo pipefail
+          IMAGE="$REGISTRY/$ECR_REPO:$GITHUB_SHA"
+          if aws ecr describe-images --region "$AWS_REGION" --repository-name "$ECR_REPO" --image-ids imageTag="$GITHUB_SHA" >/dev/null 2>&1; then
+            echo "image for $GITHUB_SHA already exists; tags are immutable, nothing to push"
+            exit 0
+          fi
+          docker build -t "$IMAGE" .
+          docker push "$IMAGE"
+          DIGEST=$(aws ecr describe-images --region "$AWS_REGION" --repository-name "$ECR_REPO" --image-ids imageTag="$GITHUB_SHA" --query 'imageDetails[0].imageDigest' --output text)
+          echo "pushed $IMAGE"
+          echo "digest $DIGEST"

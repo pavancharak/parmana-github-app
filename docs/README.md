@@ -32,6 +32,7 @@ If two documents conflict, the conflict is a defect. Record it in `product/OPEN-
 | `architecture/` | [GITHUB-INTEGRATION.md](architecture/GITHUB-INTEGRATION.md) | Webhooks, installations, checks, commit binding |
 | `architecture/ADR/` | [ADR index](architecture/ADR/README.md) | Architecture decision records |
 | `api/` | [API-CONTRACTS.md](api/API-CONTRACTS.md) | External and internal API contracts |
+| `api/` | [AGENT-FORMAT-REGISTER.md](api/AGENT-FORMAT-REGISTER.md) | Supported agent configuration formats, with status and release |
 | `api/` | [CAPABILITY-SCHEMA.md](api/CAPABILITY-SCHEMA.md) | Canonical capability schema v1.0 |
 | `api/` | [POLICY-SCHEMA.md](api/POLICY-SCHEMA.md) | Policy schema v1.0 and evaluation semantics |
 | `api/` | [EVIDENCE-SCHEMA.md](api/EVIDENCE-SCHEMA.md) | Evidence record schema v1.0 and verification |

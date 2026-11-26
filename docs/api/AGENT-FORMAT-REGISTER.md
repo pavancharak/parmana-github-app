@@ -1,7 +1,7 @@
 # Agent configuration format register
 
 Document version: 1.0
-Status as of 2026-11-26. Owner: Pavan Charak.
+Status as of 2026-11-26. Owner: Pavan Charak. Rows marked "verified" were checked against the tool's published documentation on that date; the tool's docs may change, so re-check before each parser is written.
 
 Parmana analyses only the formats listed here with status **Supported**. Any other file is reported as unsupported and is never treated as safe (FR-03 item 10, FR-04 item 5).
 
@@ -23,9 +23,12 @@ Each format has a version. A parser change that alters how a format is read bump
 | GitHub Copilot instructions | GitHub Copilot | `.github/copilot-instructions.md` | Planned | 1.0 | FR-03 target |
 | MCP configuration | Any MCP client | Supported MCP JSON files | Planned | 1.0 | List of supported files to be fixed in the parser spec |
 | GitHub Actions workflows | GitHub Actions | `.github/workflows/*.yml` | Planned | 1.0 | Covers workflow modification and secret access |
-| Cursor rules | Cursor | `.cursor/rules/`, `.cursorrules` | Candidate, to verify | Later | Check current location and format |
-| Codex configuration | OpenAI Codex CLI | `AGENTS.md` and its config file | Candidate, to verify | Later | Check whether its config is in scope |
-| Gemini CLI settings | Gemini CLI | `GEMINI.md` and `.gemini/settings.json` | Candidate, to verify | Later | Check current location and format |
+| Cursor project rules | Cursor | `.cursor/rules/*.mdc`, nested directories allowed | Candidate, verified 2026-11-26 | Later | `.mdc` files scoped by path, manual, or relevance. Also reads root `AGENTS.md`. Legacy `.cursorrules` still supported but deprecated. Source: cursor.com/docs/rules |
+| Codex project config | OpenAI Codex CLI | `.codex/config.toml` (per directory, loaded only for trusted projects) | Candidate, verified 2026-11-26 | Later | Some keys (`openai_base_url`, `model_provider`, `notify`) are ignored in project files. Source: developers.openai.com/codex/config-reference |
+| Codex user config | OpenAI Codex CLI | `~/.codex/config.toml`, profile files `~/.codex/<name>.config.toml` | Candidate, verified 2026-11-26 | Later | User-level settings; profiles overlay the base file. Source: developers.openai.com/codex/config-advanced |
+| Codex agent instructions | OpenAI Codex CLI | `AGENTS.md`, found by walking up to the project root (default: directory with `.git`) | Candidate, verified 2026-11-26 | Later | Covered by the shared `AGENTS.md` parser. Embedded up to 32 KiB by default |
+| Gemini CLI settings | Gemini CLI | `~/.gemini/settings.json`, `.gemini/settings.json`, system file under `/etc/gemini-cli/` (Linux), `C:\ProgramData\gemini-cli\` (Windows), `/Library/Application Support/GeminiCli/` (macOS) | Candidate, partly verified 2026-11-26 | Later | Precedence between system, project and user files is not consistent across sources; verify on geminicli.com/docs/cli/configuration before building. The legacy v1 format is deprecated |
+| Gemini CLI context | Gemini CLI | `GEMINI.md` in home, parent directories and current directory (filename configurable) | Candidate, verified 2026-11-26 | Later | Source: geminicli.com/docs/cli/configuration |
 
 ## Rules for adding a format
 

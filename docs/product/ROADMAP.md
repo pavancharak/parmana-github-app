@@ -32,6 +32,7 @@ Customer-facing summary: see the final copy in `STORY.md`. Detailed work items: 
 
 **Delivers**
 - All settings file types the company uses.
+- Multiple repositories, across the whole organization: each repository has its own report-only or enforced setting, and the company sees one inventory for all of them.
 - The full policy engine, with rule ordering.
 - Enforcement through the company's branch rules.
 - Full approval workflow: expiry, no reuse, and two-person approval for sensitive rules.
@@ -50,6 +51,18 @@ Customer-facing summary: see the final copy in `STORY.md`. Detailed work items: 
 - A security review and an independent penetration test show no open high or critical findings.
 - A restore from backup is tested.
 
+### Multiple repositories (Release 1.0)
+
+Details of how multiple repositories work, so the rule is the same everywhere:
+
+- **Installation choice.** A company picks "all repositories" or "selected repositories" when installing the app. Parmana only reads what it is given.
+- **One rule, applied per repository.** A company sets its rule once, and can override it for a single repository, for example to start report-only on a new one.
+- **Separate history per repository.** Each repository keeps its own record of decisions, so one team's changes never mix with another's.
+- **One view for leaders.** The dashboard shows every repository, which helpers they contain, and what is waiting for approval.
+- **Added and removed repositories.** A repository added later starts in report-only mode. A removed one keeps its history, but stops being checked.
+
+Not in the pilot: the pilot covers one repository, as approved in ADR-0006. Multiple repositories start when Stage 2 begins.
+
 ## Stage 3: Later
 
 Not planned for Release 1.0. Each item needs its own decision before work starts.
@@ -65,7 +78,7 @@ Not planned for Release 1.0. Each item needs its own decision before work starts
 | Stage | Customers can | Customers cannot |
 | --- | --- | --- |
 | Pilot | Use one repository in report-only mode, approve changes manually | Rely on enforcement, signed records or a dashboard |
-| Release 1.0 | Enforce rules on all their repositories, verify records offline, use the dashboard | Use runtime monitoring or automatic fixes |
+| Release 1.0 | Enforce rules across all their repositories, verify records offline, use the dashboard | Use runtime monitoring or automatic fixes |
 
 ## Open questions
 

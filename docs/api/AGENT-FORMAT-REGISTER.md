@@ -105,6 +105,16 @@ Source: https://docs.aws.amazon.com/amazonq/latest/qdeveloper-ug/context-project
 - https://docs.devin.ai/onboard-devin/agents-md failed with `getaddrinfo ENOTFOUND docs.devin.ai`.
 - Not verified: AGENTS.md location, automatic load limit and value, directory scoping.
 
+## Downloaded page check, 2026-11-26
+
+The owner downloaded the pages below and ran a text search over them. The results are quoted from the saved pages only. Nothing here comes from search snippets.
+
+- **Codex `project_doc_max_bytes` default and precedence: not stated.** The config reference says "Maximum bytes read from AGENTS.md when building project instructions." The advanced page says "how much to read from each AGENTS.md file". Neither gives a default value or a precedence rule. Source: codex-config-reference.html and codex-config-advanced.html. Project discovery: "walking up from the working directory until it reaches a project root."
+- **Kimi AGENTS.md discovery and precedence: not stated.** The Kimi configuration page (kimi-config-files.html) does not describe AGENTS.md discovery. It mentions the "current AGENTS.md snapshot" only inside the auto-review section, which concerns the reviewer and not instruction loading. Still unverified.
+- **GitHub Copilot nested AGENTS.md: not stated.** copilot-custom-instructions.html names AGENTS.md, CLAUDE.md and GEMINI.md as instruction files. It does not say whether nested AGENTS.md files are read. The same answer came from GitHub's docs source earlier.
+- **Cursor legacy `.cursorrules`: not on the page.** cursor-rules.html does not mention `.cursorrules`. The page covers `.cursor/rules/*.mdc` and AGENTS.md in the project root and subdirectories. Legacy status stays unverified.
+- Junie (junie-guidelines.html) and Devin (devin-agents-md.html) match the entries above: Junie discovery order and global path; Devin auto-includes the first 16 KiB (16,384 bytes) of each AGENTS.md.
+
 ## Rules for adding a format
 
 1. Record the source of the format's documentation and the version it was read from.

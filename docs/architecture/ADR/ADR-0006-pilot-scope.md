@@ -1,6 +1,6 @@
 # ADR-0006: Pilot scope before Release 1.0
 
-Status: Proposed, for owner decision
+Status: Accepted (2026-11-26, owner decision OD-15). Long-term choice: the pilot is the first milestone, and Release 1.0 follows it. Unsigned records are a pilot limit only; signed records remain a Release 1.0 requirement.
 Date: 2026-11-26
 Decision owner: Pavan Charak
 

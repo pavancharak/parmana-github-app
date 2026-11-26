@@ -19,7 +19,7 @@ A decision is **open** until an ADR is accepted (`architecture/ADR/`) or the own
 | OD-12 | Dashboard framework | Next.js per spec; confirm hosting | Phase 6 | Pavan Charak | Open (spec default: Next.js) |
 | OD-13 | Representation of "production access" in policy. The spec's example uses `capability: production_access`, which is not in the capability enum | (a) Map to `secret_access` or `external_service` with a `target` attribute; (b) add a `production_access` capability type in CAPABILITY-SCHEMA v1.1 | Phase 3 | Pavan Charak | Open (recommendation: a) |
 | OD-14 | Queue and database access technology | See ADR-0004 and ADR-0005 | Phase 1 | Pavan Charak | Open |
-| OD-15 | Pilot scope: approve the pilot definition in ADR-0006 (one repository, one format, one rule, dry-run, manual approval, unsigned records) | Approve as written; or change one item | Pilot start | Pavan Charak | Open (proposed 2026-11-26) |
+| OD-15 | Pilot scope: approve the pilot definition in ADR-0006 (one repository, one format, one rule, dry-run, manual approval, unsigned records) | Approve as written; or change one item | Pilot start | Pavan Charak | Resolved 2026-11-26: approved as written (ADR-0006). Signed records remain a Release 1.0 requirement |
 
 ## Resolution procedure
 

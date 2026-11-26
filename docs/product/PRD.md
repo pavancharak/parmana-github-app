@@ -156,7 +156,7 @@ This keeps the first release from becoming an oversized AI security platform.
 
 ## 14. Pilot milestone (proposed)
 
-Status: proposed on 2026-11-26, pending owner decision (see `architecture/ADR/ADR-0006-pilot-scope.md`).
+Status: accepted 2026-11-26 (OD-15, see `architecture/ADR/ADR-0006-pilot-scope.md`). Release 1.0 is unchanged and follows the pilot.
 
 Before Release 1.0, deliver a pilot that proves the core story with one design partner:
 

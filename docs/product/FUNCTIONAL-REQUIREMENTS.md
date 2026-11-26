@@ -202,7 +202,7 @@ Users see only their organization's data. Dashboard counts reconcile with underl
 7. Data retention controls.
 8. Tenant suspension and deletion workflows.
 
-## FR-14: Dry-run mode (proposed, pilot)
+## FR-14: Dry-run mode (accepted 2026-11-26, pilot)
 
 **Purpose:** let a team see what Parmana would block before Parmana can block anything.
 

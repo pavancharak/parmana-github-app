@@ -1,6 +1,6 @@
 # Value proposition: Parmana Agent Permission Control
 
-Status: Draft for review. Document version 1.2.
+Status: Draft for review. Document version 1.3.
 
 ## Statement
 
@@ -11,9 +11,18 @@ Know what every AI agent in your repositories is allowed to do, whichever tool o
 - **See what agents are declared to do.** Parmana reads agent configuration files in your repositories and records the permissions they declare, each linked to the file and commit it came from.
 - **Catch permission drift in pull requests.** When a pull request expands an agent's authority, Parmana flags it and publishes a GitHub check on that exact commit. Repository owners decide whether to require the check before merging.
 - **Treat unknown agents as unknown.** A file Parmana cannot read is reported as *not evaluated*, never as passing. This is the fail-closed rule in `docs/architecture/ADR/ADR-0002-fail-closed.md`.
-- **Keep approvals honest.** An approval comes from an identified person who has completed a fresh sign-in step, as set out in `docs/architecture/ADR/ADR-0008-approval-identity-and-signing-custody.md`. An approval applies only to the commit it was given for. When the commit changes, the approval is marked superseded and a new decision is needed. *Specified, not yet built.*
+- **Keep approvals honest.** Parmana Core verifies each approval. The approval comes from an identified person who has completed a fresh sign-in step, as set out in `docs/architecture/ADR/ADR-0008-approval-identity-and-signing-custody.md`. An approval applies only to the commit it was given for. When the commit changes, the approval is marked superseded and a new decision is needed. *Specified, not yet built.*
 - **Same input, same result.** The same commit always produces the same report. The check reads files and calls no language model, so the result does not depend on which vendor or model an agent uses. *Specified, not yet built.*
-- **Prove decisions later.** Each decision is signed and linked to the one before it, so a customer can verify the record offline without trusting the vendor. *Specified, not yet built.*
+- **Prove decisions later.** Parmana Core signs each decision and links it to the one before it, so a customer can verify the record offline without trusting the vendor. The app does not sign anything itself. *Specified; depends on Parmana Core.*
+
+## How the product fits with Parmana Core
+
+Parmana Core is the sole authority for authorization decisions and for signing and verifying evidence. The GitHub app does not make a competing decision and does not sign anything. This follows `docs/architecture/ADR/ADR-0001-core-is-authority.md`, which is still Proposed and awaits owner acceptance.
+
+- **The app provides:** discovery and reading of agent configuration files in repositories, comparison with the base branch to find permission changes, and publication of the GitHub check on the evaluated commit.
+- **Parmana Core provides:** the decision on each change, the signature on that decision, the link to the previous record, and offline verification.
+
+A Core outage produces fail-closed results in the app, as set out in `docs/architecture/ADR/ADR-0002-fail-closed.md`.
 
 ## Vendor and tool neutrality
 
@@ -46,7 +55,7 @@ Which formats are supported, and when, is recorded in `docs/api/AGENT-FORMAT-REG
 | Superseded approvals stop applying | `docs/product/FUNCTIONAL-REQUIREMENTS.md` FR-09; not yet tested |
 | Same commit, same result | `docs/product/FUNCTIONAL-REQUIREMENTS.md`; not yet tested |
 | Unknown formats are not treated as safe | `docs/product/FUNCTIONAL-REQUIREMENTS.md` FR-03 item 10, FR-04 item 5 |
-| Decisions are signed and chained | `docs/security/CRYPTOGRAPHIC-EVIDENCE.md`; tests CRY-001 to CRY-012 |
+| Decisions are signed and chained by Parmana Core | `docs/security/CRYPTOGRAPHIC-EVIDENCE.md`; tests CRY-001 to CRY-012; ADR-0001 |
 | Checks are published only for the evaluated commit | `packages/github-client/src/rest.ts`; test GH-017, GH-018 |
 | Success is never published without evidence | `packages/github-client/src/rest.ts`; test AC-10.6 |
 | Supported formats and their sources | `docs/api/AGENT-FORMAT-REGISTER.md` |

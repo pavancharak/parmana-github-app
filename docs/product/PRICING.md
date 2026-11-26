@@ -6,6 +6,8 @@ Status: proposal for owner decision. Prices are in US dollars, billed monthly th
 
 **Repositories monitored.** A repository counts when Parmana checks its pull requests. Repositories in a company's installation that have no settings files do not count. This matches how the value is delivered, and it is easy for a customer to predict.
 
+**Users are never a billing unit.** Every tier allows unlimited users. Price changes only with the number of repositories monitored and the features chosen.
+
 ## Tiers
 
 | | **Pilot (free)** | **Team** | **Business** | **Enterprise** |
@@ -18,7 +20,7 @@ Status: proposal for owner decision. Prices are in US dollars, billed monthly th
 | Settings file types | 1 | All in Release 1.0 | All in Release 1.0 | All in Release 1.0, plus custom formats on request |
 | Decision records | Stored, unsigned | Signed, 90-day retention | Signed, exportable, 1-year retention | Signed, exportable, custom retention, offline verification |
 | Dashboard | None | Basic | Full | Full, plus shared views |
-| Access | One administrator | Up to 5 users | Role-based access, unlimited users | Single sign-on and role-based access |
+| Access | Sign-in included | Sign-in included, unlimited users | Role-based access, unlimited users | Single sign-on and role-based access, unlimited users |
 | Notifications | None | Email | Email and chat | Email, chat and custom webhooks |
 | Support | Community | Business hours by email | Business hours, plus 24/7 for critical issues | Named contact, custom response times |
 | Data location | Default | Default | Default | Choice of region, including Mumbai |
@@ -32,7 +34,7 @@ Status: proposal for owner decision. Prices are in US dollars, billed monthly th
 ## Why these choices
 
 - **The free pilot** lets a team try the product on one repository without a purchase decision. It produces the evidence the owner needs for the enforcement decision.
-- **Repositories as the unit** grows with use, and avoids charging per person, which would discourage developers from adopting the tool.
+- **Repositories as the unit** grows with use, and avoids charging per person, which would discourage developers from adopting the tool. Users are free on every tier, so adding reviewers or managers never raises the bill.
 - **Four tiers** cover a small team, a mid-sized company and a large enterprise, without an option for every size.
 - **Enterprise is by contact** because single sign-on, regional data and custom retention are negotiated per customer.
 
@@ -40,6 +42,7 @@ Status: proposal for owner decision. Prices are in US dollars, billed monthly th
 
 1. Confirm the four price points, or change them.
 2. Confirm the repository caps (10 and 100).
+2a. Confirm that no tier limits users, as written.
 3. Confirm that the free pilot is listed on Marketplace, or kept private for design partners only.
 4. Confirm the trial length.
 5. Confirm the enforcement and approval features that make each paid tier worth its price.

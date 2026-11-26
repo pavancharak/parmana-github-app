@@ -113,6 +113,7 @@ The owner downloaded the pages below and ran a text search over them. The result
 - **Kimi AGENTS.md discovery and precedence: not stated.** The Kimi configuration page (kimi-config-files.html) does not describe AGENTS.md discovery. It mentions the "current AGENTS.md snapshot" only inside the auto-review section, which concerns the reviewer and not instruction loading. Still unverified.
 - **GitHub Copilot nested AGENTS.md: not stated.** copilot-custom-instructions.html names AGENTS.md, CLAUDE.md and GEMINI.md as instruction files. It does not say whether nested AGENTS.md files are read. The same answer came from GitHub's docs source earlier.
 - **Cursor legacy `.cursorrules`: not on the page.** cursor-rules.html does not mention `.cursorrules`. The page covers `.cursor/rules/*.mdc` and AGENTS.md in the project root and subdirectories. Legacy status stays unverified.
+- **Codex `project_doc_max_bytes` default: still not stated (checked again).** The Config Advanced page (developers.openai.com/codex/config-advanced) says only "project_doc_max_bytes: how much to read from each AGENTS.md file" under Project instructions discovery. It gives no default and no precedence rule. It links to "Custom instructions with AGENTS.md" for a walkthrough, which is the next page to check.
 - Junie (junie-guidelines.html) and Devin (devin-agents-md.html) match the entries above: Junie discovery order and global path; Devin auto-includes the first 16 KiB (16,384 bytes) of each AGENTS.md.
 
 ## Rules for adding a format

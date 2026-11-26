@@ -14,7 +14,7 @@ Status: Proposed. Ownership decision: option 1 (Parmana Core provides the tenant
 
 ## 2. Ownership
 
-Under option 1, Parmana Core owns the evidence, audit, policy and approval tables, and the app owns the GitHub tables. Core must add tenant scoping before the app uses its database. This follows `docs/architecture/ADR/ADR-0001-core-is-authority.md` and Core's ADR-0021.
+Under option 1, the database is Parmana Core's. Core owns the evidence, audit, policy and approval tables, and the app owns the GitHub tables, which sit in the same database. Core must add tenant scoping before the app uses that database. The app does not need its own database instance. This follows `docs/architecture/ADR/ADR-0001-core-is-authority.md` and Core's ADR-0021.
 
 | Owner | Tables |
 | --- | --- |

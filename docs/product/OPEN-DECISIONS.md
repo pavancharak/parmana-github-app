@@ -1,25 +1,37 @@
 # Open Decisions Register
 
-Document version: 1.0
+Document version: 1.1
+Status as of 2026-11-26.
+
 A decision is **open** until an ADR is accepted (`architecture/ADR/`) or the owner records a decision here. Phase 1 must not start for an area whose blocking decision is open.
 
-| ID | Decision needed | Options | Blocks | Owner | Status |
+Status key: **Decided** (owner decision recorded), **Decided, confirmation pending** (decision made, an outside party must confirm), **Open** (needs input before the stated phase).
+
+| ID | Decision needed | Decision (2026-11-26) | Blocks | Owner | Status |
 | --- | --- | --- | --- | --- | --- |
-| OD-01 | Exact list of supported configuration formats and their versions for Release 1.0 | Minimal set (Claude Code, AGENTS.md, Copilot instructions, MCP JSON, workflows) or extended. Proposed for the pilot: `.claude/settings.json` only (ADR-0006) | Phase 2 | Pavan Charak | Open (pilot proposal: `.claude/settings.json`) |
-| OD-02 | Tenant identity model: is the GitHub organization ID the only tenant key, or is a Parmana-internal tenant ID mapped to it? | (a) Internal UUID mapped to GitHub org ID; (b) GitHub org ID as primary key | Phase 0 exit | Pavan Charak | Open (recommendation: a) |
-| OD-03 | Parmana Core integration mode | (a) In-process SDK package; (b) network API with Core as a separate service | Phase 4 | Pavan Charak with Core maintainers | Open |
-| OD-04 | Human approval identity for approvers | GitHub OAuth only; GitHub OAuth plus step-up or signed approval | Phase 5 | Pavan Charak | Open |
-| OD-05 | Signing key custody | AWS KMS per tenant; KMS with envelope keys; other HSM | Phase 4 | Pavan Charak | Open (recommendation: KMS) |
-| OD-06 | Retention and deletion periods for evidence versus tenant data | Per-tenant configuration with a floor set by legal review | Phase 6 | Pavan Charak and counsel | Open |
-| OD-07 | RPO and RTO targets | Values to be proposed after architecture review | Phase 7 | Pavan Charak | Open |
-| OD-08 | Two-person approval policy default | Off by default; on for Critical drift only | Phase 5 | Pavan Charak | Open |
-| OD-09 | Compliance certifications in scope and timing | None for 1.0; SOC 2 Type I after first customer | Phase 7 | Pavan Charak | Open |
-| OD-10 | Dedicated user story for drift detection (FR-06) | Add US-26 in v1.1 | Phase 3 exit | Product | Open |
-| OD-11 | Repository for the Core dependency: is `parmana-core` the only integration target, or are SDK packages published separately? | Monorepo package versus published package | Phase 4 | Pavan Charak | Open |
-| OD-12 | Dashboard framework | Next.js per spec; confirm hosting | Phase 6 | Pavan Charak | Open (spec default: Next.js) |
-| OD-13 | Representation of "production access" in policy. The spec's example uses `capability: production_access`, which is not in the capability enum | (a) Map to `secret_access` or `external_service` with a `target` attribute; (b) add a `production_access` capability type in CAPABILITY-SCHEMA v1.1 | Phase 3 | Pavan Charak | Open (recommendation: a) |
-| OD-14 | Queue and database access technology | See ADR-0004 and ADR-0005 | Phase 1 | Pavan Charak | Open |
-| OD-15 | Pilot scope: approve the pilot definition in ADR-0006 (one repository, one format, one rule, dry-run, manual approval, unsigned records) | Approve as written; or change one item | Pilot start | Pavan Charak | Open (proposed 2026-11-26) |
+| OD-01 | Supported configuration formats for Release 1.0 | Pilot: `.claude/settings.json` only (ADR-0006). Release 1.0: Claude Code settings, `AGENTS.md`, Copilot instructions, MCP JSON and GitHub Actions workflows. Each format has a versioned parser. Any other format is reported as unsupported, never analysed. | Phase 2 | Pavan Charak | Decided |
+| OD-02 | Tenant identity model | (a) Internal UUID mapped to the GitHub organization ID. Recorded in `DECISION-MEMO-PHASE1.md` (D1), owner confirmed 2026-11-25. | Phase 0 exit | Pavan Charak | Decided |
+| OD-03 | Parmana Core integration mode | (b) Core runs as a separate service behind a versioned network API over mutual TLS. Only Core holds tenant signing access. Recorded in the Phase 1 memo (D2). | Phase 4 | Pavan Charak with Core maintainers | Decided, confirmation pending (Core maintainers, issue #782, requested by 2026-12-09) |
+| OD-04 | Human approval identity | GitHub OAuth sign-in, plus step-up re-authentication within 5 minutes before any approval is recorded. Signed approval through Core is planned for a later release. See ADR-0008. | Phase 5 | Pavan Charak | Decided |
+| OD-05 | Signing key custody | AWS KMS, one customer-managed key per tenant, used only by Core. See ADR-0008. | Phase 4 | Pavan Charak | Decided |
+| OD-06 | Retention and deletion periods | Design decided: retention is per tenant, stored in the tenant record, and cannot be set below the floor. Evidence is never deleted before its retention period ends. The floor values (and the pricing retention periods of 90 days and one year) need counsel review before publishing. | Phase 6 | Pavan Charak and counsel | Partly decided: floor pending counsel |
+| OD-07 | RPO and RTO targets | RPO 15 minutes (RDS point-in-time recovery enabled). RTO 4 hours for the pilot and Release 1.0. Review after the first restore rehearsal in staging. | Phase 7 | Pavan Charak | Decided |
+| OD-08 | Two-person approval default | Off by default. On for Critical drift only. Tenant administrators may change it. | Phase 5 | Pavan Charak | Decided |
+| OD-09 | Compliance certifications | None for Release 1.0. SOC 2 Type I begins after the first paying customer. | Phase 7 | Pavan Charak | Decided |
+| OD-10 | Dedicated user story for drift detection (FR-06) | Add US-26 in v1.1, not before. | Phase 3 exit | Product | Decided (v1.1) |
+| OD-11 | Core integration target | `parmana-core` is the only integration target. No SDK package is published in Release 1.0. Integration is through the network API in OD-03. | Phase 4 | Pavan Charak | Decided |
+| OD-12 | Dashboard framework | Next.js, as in the spec, hosted on AWS in ap-south-1 alongside the App. | Phase 6 | Pavan Charak | Decided |
+| OD-13 | Representation of "production access" in policy | (a) Map to `secret_access` or `external_service` with a `target` attribute. No new capability type in CAPABILITY-SCHEMA v1.0. | Phase 3 | Pavan Charak | Decided |
+| OD-14 | Queue and database access technology | Per the Phase 1 memo (D3, D4): PostgreSQL transactional outbox behind a `JobQueue` interface (ADR-0004), and Drizzle with reviewed SQL migrations (ADR-0005). | Phase 1 | Pavan Charak | Decided (memo D3, D4) |
+| OD-15 | Pilot scope (ADR-0006) | Approved as written: one repository, `.claude/settings.json`, one rule, two weeks of dry-run, manual approval, unsigned records. | Pilot start | Pavan Charak | Decided |
+
+## Decision log
+
+| Date | Decision | Recorded in |
+| --- | --- | --- |
+| 2026-11-25 | D1 tenant identity (OD-02), D3 queue (OD-14), D4 database access (OD-14) accepted; D2 Core integration (OD-03) accepted, pending Core confirmation | `DECISION-MEMO-PHASE1.md` on `claude/phase1-decision-memo` |
+| 2026-11-26 | OD-01, OD-04 to OD-13, OD-15 decided | This file, ADR-0008 |
+| 2026-11-26 | Plan entitlements and report-only mode | ADR-0007 |
 
 ## Resolution procedure
 

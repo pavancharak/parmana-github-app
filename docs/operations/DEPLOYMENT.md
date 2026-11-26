@@ -51,7 +51,7 @@ No production data is copied to non-production environments.
 ## 6. Configuration
 
 - Configuration via environment variables and secret store references. No secrets in images or repositories.
-- Feature flags are not used to bypass enforcement. A flag that disables a check is prohibited.
+- Feature flags are not used to bypass enforcement. A plan or mode setting may make a check report `neutral` (report-only, ADR-0007). No setting may skip evaluation or evidence recording.
 
 ## 7. Network
 

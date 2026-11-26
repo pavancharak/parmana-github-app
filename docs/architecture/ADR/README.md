@@ -24,3 +24,5 @@ Decision owner: name
 | [ADR-0003](ADR-0003-tenant-context.md) | Explicit tenant context with composite keys and RLS | Proposed |
 | [ADR-0004](ADR-0004-queue.md) | Durable queue technology | Proposed (decision required; see OD-03) |
 | [ADR-0005](ADR-0005-database-access.md) | Database access layer | Proposed (decision required) |
+| [ADR-0007](ADR-0007-plan-entitlements.md) | Plan entitlements and report-only mode | Accepted (2026-11-26) |
+| [ADR-0008](ADR-0008-approval-identity-and-signing-custody.md) | Approval identity and signing key custody | Accepted (2026-11-26) |

@@ -38,6 +38,29 @@ Know which AI agents can act in your repositories, whether their permissions hav
 
 Status of these claims: the GitHub integration, webhook handling, and check publication are implemented and tested. Policy evaluation, signing and offline verification are specified but not yet built. Customer-facing copy must say so until they are.
 
+## Business value
+
+Written in plain terms. Each benefit is labelled with its status, so customer copy only uses the ones that are true today.
+
+**Saves money and time**
+- *Fewer surprise problems.* A helper that suddenly gains deploy access can cause an outage. Catching that change before it ships avoids the cost of cleaning up after it. Status: specified, not yet built.
+- *Faster audits.* The auditor gets an answer in an afternoon, not weeks of searching. Status: specified; depends on signed records, not yet built.
+- *Less review work.* Reviewers see permission changes already highlighted, instead of reading every settings file. Status: specified; depends on reading settings files, not yet built.
+
+**Lowers risk**
+- *Catches quiet expansions.* A small edit to a settings file is easy to miss. Status: specified; depends on the drift engine, not yet built.
+- *One place for every helper.* Companies using several AI tools get a single check instead of one per tool. Status: specified; only one format is planned for the first release.
+
+**Helps the business**
+- *Shows the company is in control.* Customers and partners ask how AI tools are governed. Status: specified; depends on the record and the approval step.
+- *Supports compliance.* The record of decisions helps with security questionnaires and regulated industries. Status: specified; depends on signed records.
+- *Builds trust in AI adoption.* Teams can use agents more freely, because risky changes are caught. Status: specified.
+
+**Gives leaders a clear view**
+- *One answer to "what can our AI tools do?"* Status: specified; depends on the dashboard, not yet built.
+
+**The headline for a buyer:** a company can adopt AI helpers faster without giving up control. This is the claim to lead with once the first working path is complete.
+
 ## Non-claims for customer material
 
 Use the wording in `docs/security/SECURITY-BOUNDARIES.md` §2. In particular, do not say that Parmana proves what an agent executed, or that it prevents merges on its own.

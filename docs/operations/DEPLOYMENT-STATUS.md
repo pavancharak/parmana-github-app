@@ -92,6 +92,17 @@ Account-level changes made during the deployment. Recorded so the account state 
 | 11-26 | 07:37 | Manual snapshot `dip` deleted | us-east-1 | Owner requested complete deletion |
 | 11-26 | 07:38 | `dip-postgres` deleted, with no final snapshot and no retained automated backups | us-east-1 | Owner requested complete deletion |
 
+| 11-26 | 08:08 | Console sign-in removed for `parmana-kms-operator` (login profile deleted) | global | Unexplained console sign-in on 11-13 22:09 IST with account-wide reads (ListUsers, GetAccountSummary, Resource Explorer search). Owner had not signed in. |
+| 11-26 | 08:10 | Access key of `parmana-kms-operator` deleted (was unused since creation on 09-15) | global | Same review; key was no longer needed |
+| 11-26 | 08:12 | Root user access key made inactive | global | Root keys should not exist. CloudTrail showed only read-only SES calls by root on 11-20/21 (no sends). |
+
+Security review status (2026-11-26):
+
+- Root access key: inactive. Reactivate in Security credentials if a dependency appears.
+- `parmana-kms-operator`: no console sign-in, no access keys.
+- Still active, not yet reviewed: `parmana-kms-drill` (used for identity checks on 11-25; deactivate once no longer needed), `dip-deployer`, `dip-sandbox`, `cost-audit` (belong to other projects; confirm with their owners).
+- Watch for failures in the next few days after the root key change.
+
 `dip-postgres` belongs to a separate project (`dip-*`). It was flagged by Trusted Advisor as unencrypted. Its deletion was requested and approved by the account owner. Nothing in the Parmana deployment depends on it.
 
 Checked afterwards: no databases in us-east-1, no current-region automated backups, and the Retained and Replicated backup tabs are empty.

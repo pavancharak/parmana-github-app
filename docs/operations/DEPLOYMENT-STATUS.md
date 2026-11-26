@@ -43,7 +43,11 @@ Checked and still failing:
 - The boundary removed, to rule it out.
 - The service-linked role already exists.
 
-The cause is not yet known. A support case is the next step. Text for the case:
+The cause is not yet known.
+
+**AWS Support case: 179565931200998** (opened 2026-11-26, Business Support+, Technical, service App Runner, category General Guidance, severity General guidance, communication Web, region ap-south-1, no logs attached). Status at submission: Unassigned. Check the case in Support Center → Support Cases.
+
+Case text, as submitted:
 
 > Subject: App Runner VPC connector fails with AccessDenied for service-linked role, account <ACCOUNT_ID>, ap-south-1
 >

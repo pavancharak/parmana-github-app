@@ -32,7 +32,7 @@ Sources: GitHub Docs, "Pricing plans for GitHub Marketplace apps"; "Set listing 
 | Rules | 1 (approval for deploy, command or outside-connection access) | Up to 5 | Unlimited | Unlimited |
 | Approvals | Manual | Manual, with expiry | Manual, with expiry and two-person approval | Manual, with expiry, two-person approval, and custom approver groups |
 | Settings file types | 1 | All in Release 1.0 | All in Release 1.0 | All in Release 1.0, plus custom formats on request |
-| Decision records | Stored, unsigned | Signed, 90-day retention | Signed, exportable, 1-year retention | Signed, exportable, custom retention, offline verification |
+| Decision records | Stored, unsigned, 3-day retention | Signed, 7-day retention | Signed, exportable, 60-day retention | Signed, exportable, custom retention (longer periods by contract), offline verification |
 | Dashboard | None | Basic | Full | Full, plus shared views |
 | Access | Sign-in included, unlimited users | Unlimited users | Role-based, unlimited users | Single sign-on and role-based, unlimited users |
 | Notifications | None | Email | Email and chat | Email, chat and custom webhooks |

@@ -93,6 +93,9 @@ Status key: **Not started**, **Blocked** (cannot proceed until the named blocker
 | G-73 | Independent penetration test | NFR-01 | Not started | G-72 | Report received; no open critical or high findings |
 | G-74 | Dependency and container scans in CI | NFR-01 | Partial (Dependabot for actions only) | None | Scan job runs on each pull request |
 | G-75 | Root and IAM hygiene | Security | Partial (root key inactive; `parmana-kms-operator` locked; other keys under review) | Owners of `dip-*` and `cost-audit` keys | Credential report shows no unexpected active keys |
+| G-76 | Plan entitlements table with RLS, written only by signed marketplace events | Pricing, NFR-07 | Not started | G-60, Owner confirms prices and caps | Plan changes are audited; unknown plan falls back to Pilot (ENT-001, ENT-004) |
+| G-77 | Report-only mode and repository cap enforced in the check run | FR-14, Pricing | Not started | G-76, G-30 | ENT-002, ENT-003 pass; over-cap repository reports `neutral` naming the limit |
+| G-78 | Downgrade applied at period end | Pricing | Not started | G-76 | ENT-005 passes |
 
 ## I. Open decisions that block the above
 

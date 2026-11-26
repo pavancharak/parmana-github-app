@@ -76,3 +76,4 @@ Sources: GitHub Docs, "Pricing plans for GitHub Marketplace apps"; "Set listing 
 - Build the plan change handling, so an upgrade or downgrade changes the repository cap in Parmana.
 - Read the current Marketplace Developer Agreement for the fee rate and payment terms.
 - Have counsel review the customer terms and data terms (see OD-06).
+- Technical rules for plans, report-only mode and caps: `architecture/ADR/ADR-0007-plan-entitlements.md` (accepted 2026-11-26). The owner still decides prices and caps.
